@@ -62,7 +62,12 @@ d3.csv('data.csv',function (data) {
       .attr('transform','translate(' + margin.left + ',' + margin.top + ')')
   
 
+  // create and init. the map country tool-tip
+  tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-5, 0])
 
+  svg.call(tip)
 
 
 
@@ -81,7 +86,10 @@ d3.csv('data.csv',function (data) {
   //   .ticks(5)
   //   .orient('left')
 
-
+    // set the tool tip's html based on the hovered country
+    tip.html(function(d) {
+            return "<span style='color:#FFDB6D'>" + d['location'] + "</span>";
+    })
 
 
   // Circles
@@ -95,7 +103,9 @@ d3.csv('data.csv',function (data) {
       .attr('stroke','black')
       .attr('stroke-width',1)
       .attr('fill',function (d,i) { return colorScale(i) })
-      .on('mouseover', function () {
+      .on('mouseover', function (d) {
+
+        tip.show(d)
         d3.select(this)
           .transition()
           .duration(500)
@@ -103,6 +113,8 @@ d3.csv('data.csv',function (data) {
           .attr('stroke-width',3)
       })
       .on('mouseout', function () {
+
+        tip.hide()
         d3.select(this)
           .transition()
           .duration(500)
@@ -143,6 +155,22 @@ d3.csv('data.csv',function (data) {
   //     .attr('dy','.71em')
   //     .style('text-anchor','end')
   //     .text('y')
+
+
+
+
+
+      // set the tool tip's html based on the hovered country
+
+
+
+
+
+    // tell each country to display the tool tip when mouseover and remove on mouseout
+    // circles.on('mouseover', tip.show)
+    //     .on('mouseout', tip.hide)
+
+
 
   function yChange() {
     var value = this.value // get the new y value
