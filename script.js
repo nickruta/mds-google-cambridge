@@ -65,7 +65,7 @@ d3.csv('data.csv',function (data) {
   // create and init. the map country tool-tip
   tip = d3.tip()
       .attr('class', 'd3-tip')
-      .offset([-5, 0])
+      .offset([-15, -8])
 
   svg.call(tip)
 
@@ -99,27 +99,27 @@ d3.csv('data.csv',function (data) {
     .append('circle')
       .attr('cx',function (d) { return xScale(d['x_miles']) })
       .attr('cy',function (d) { return yScale(d['y_miles']) })
-      .attr('r','10')
+      .attr('r','13')
       .attr('stroke','black')
       .attr('stroke-width',1)
       .attr('fill',function (d,i) { return colorScale(i) })
       .on('mouseover', function (d) {
 
         tip.show(d)
-        d3.select(this)
-          .transition()
-          .duration(500)
-          .attr('r',20)
-          .attr('stroke-width',3)
+        // d3.select(this)
+        //   .transition()
+        //   .duration(500)
+        //   .attr('r',20)
+        //   .attr('stroke-width',3)
       })
       .on('mouseout', function () {
 
         tip.hide()
-        d3.select(this)
-          .transition()
-          .duration(500)
-          .attr('r',10)
-          .attr('stroke-width',1)
+        // d3.select(this)
+        //   .transition()
+        //   .duration(500)
+        //   .attr('r',10)
+        //   .attr('stroke-width',1)
       })
     .append('title') // Tooltip
       .text(function (d) { return d['location'] 
