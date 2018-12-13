@@ -2,12 +2,29 @@
 <meta charset='utf-8'>
 <html>
   <head>
-    <script src="d3.v3.min.js" charset="utf-8"></script>
-    <link rel='stylesheet' href='style.css'>
+    <script src="js/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel='stylesheet' href='css/style.css'>
   </head>
   <body>
-  	<script type='text/javascript' src='d3-tip.js'></script>
-    <script type='text/javascript' src='script.js'></script>
+  	<div class="container">
+	  <h2 id="header-hr" class="background">AM205: Visualizing Multidimensional Scaling</h2>
+	  <h3 id="subheader">Will Claybaugh & Nick Ruta</h3>
+	  <div class="row">
+	    <div id='vis-container' class="col-8">
+	    </div>
+	    <div class="col-4">
+	      <div id='info-panel'>
+	      	When Distance is based on <strong>physical straight-line distance</strong>, the closest restaurant to Harvard is <span id='nubar'>Nubar.</span>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+  	<script type='text/javascript' src='js/d3-tip.js'></script>
+    <script type='text/javascript' src='js/script.js'></script>
 
   </body>
 </html>

@@ -1,6 +1,6 @@
-d3.csv('data.csv',function (data) {
+d3.csv('data/data.csv',function (data) {
 // CSV section
-  var body = d3.select('body')
+  var body = d3.select("#vis-container")
   var selectData = [ { "text" : "Distance based on Physical Distance" },
                      { "text" : "Distance based on Estimated Time" },
                    ]
@@ -41,28 +41,29 @@ d3.csv('data.csv',function (data) {
 
   var formatPercent = d3.format('.2%')
   // Scales
-  var colorScale = d3.scale.category20()
-  var xScale = d3.scale.linear()
+  // var colorScale = d3.scale.category20()
+  var colorScale = d3.scaleOrdinal(d3.schemeCategory20);
+  var xScale = d3.scaleLinear()
     .domain([
       d3.min([-1.5,d3.min(data,function (d) { return d['x_miles'] })]),
       d3.max([2.0,d3.max(data,function (d) { return d['x_miles'] })])
       ])
     .range([0,w])
-  var yScale = d3.scale.linear()
+  var yScale = d3.scaleLinear()
     .domain([
       d3.min([-1,d3.min(data,function (d) { return d['y_miles'] })]),
       d3.max([1.5,d3.max(data,function (d) { return d['y_miles'] })])
       ])
     .range([h,0])
   // SVG
-  var svg = body.append('svg')
+  var svg = d3.select("#vis-container").append('svg')
       .attr('height',h + margin.top + margin.bottom)
       .attr('width',w + margin.left + margin.right)
     .append('g')
       .attr('transform','translate(' + margin.left + ',' + margin.top + ')')
   
 
-  // create and init. the map country tool-tip
+  // create and init. the tool-tip
   tip = d3.tip()
       .attr('class', 'd3-tip')
       .offset([-15, -8])
@@ -103,6 +104,11 @@ d3.csv('data.csv',function (data) {
       .attr('stroke','black')
       .attr('stroke-width',1)
       .attr('fill',function (d,i) { return colorScale(i) })
+      .attr('class', function(d) {
+        if (d.location == "Harvard University") {
+          return "cirlce harvard"
+        } else {return "circle"}
+      })
       .on('mouseover', function (d) {
 
         tip.show(d)
@@ -121,14 +127,14 @@ d3.csv('data.csv',function (data) {
         //   .attr('r',10)
         //   .attr('stroke-width',1)
       })
-    .append('title') // Tooltip
-      .text(function (d) { return d['location'] 
-        // +
-        //                    '\nReturn: ' + formatPercent(d['location']) +
-        //                    '\nStd. Dev.: ' + formatPercent(d['location']) +
-        //                    '\nMax Drawdown: ' + formatPercent(d['location']) 
-                         }
-                           )
+    // .append('title') // Tooltip
+    //   .text(function (d) { return d['location'] 
+    //     // +
+    //     //                    '\nReturn: ' + formatPercent(d['location']) +
+    //     //                    '\nStd. Dev.: ' + formatPercent(d['location']) +
+    //     //                    '\nMax Drawdown: ' + formatPercent(d['location']) 
+    //                      }
+    //                        )
   // X-axis
   // svg.append('g')
   //     .attr('class','axis')
@@ -157,7 +163,51 @@ d3.csv('data.csv',function (data) {
   //     .text('y')
 
 
+  // d3.select(".harvard")
+  // .append("text")
+  //       .attr("dx", function(d){return 20})
+  //       .attr('fill','red')
+  //       .text(function(d){return d.location})
 
+
+
+    //     d3.select(".harvard").append("text")
+    //     .text(function(d) {
+    //   return d.location
+    // })
+    // .attr({
+    //   "text-anchor": "middle",
+    //   "font-size": function(d) {
+    //     return 30;
+    //   },
+    //   "dy": function(d) {
+    //     return 30;
+    //   }
+    // });
+
+    var harvard_text = svg.append("text")
+      .text(function(d) {
+        return "Harvard University"
+      })
+      .attr('x',365)
+      .attr('y',380)
+
+    var closest_text = svg.append("text")
+      .text(function(d) {
+        return "Nubar"
+      })
+      .attr('x',265)
+      .attr('y',340)
+
+
+      // .append('text') // y-axis Label
+      // .attr('id', 'harvard-annotation')
+      // // .attr('transform','rotate(-90)')
+      // // .attr('x',100)
+      // // .attr('y',100)
+      // // .attr('dy','.71em')
+      // // .style('text-anchor','end')
+      // .text('y')
 
 
       // set the tool tip's html based on the hovered country
@@ -180,6 +230,12 @@ d3.csv('data.csv',function (data) {
 var x_type = ''
 var y_type = ''
 
+var harvard_text_x;
+var harvard_text_y;
+var closest_text_x;
+var closest_text_y;
+var closest_text_label;
+
     if (value == "Distance based on Estimated Time") {
 
 
@@ -187,11 +243,28 @@ var y_type = ''
       x_type = 'x_minutes'
       y_type = 'y_minutes'
 
+      harvard_text_x = 312
+      harvard_text_y = 206
+
+
+
+            closest_text_x =320;
+      closest_text_y = 143;
+      closest_text_label = 'The Kirkland Tap & Trotter'
+
 
     } else {
 
       x_type = 'x_miles'
       y_type = 'y_miles'
+
+      harvard_text_x = 365
+      harvard_text_y = 353
+
+      closest_text_x =265;
+      closest_text_y = 315;
+      closest_text_label = 'Nubar'
+
     }
 
 
@@ -238,7 +311,21 @@ var y_type = ''
 
 
 
+    harvard_text
+      .transition()
+      .duration(1000)
+      .attr('x',harvard_text_x)
+      .attr('y',harvard_text_y)
 
+
+    closest_text
+    .style("opacity", 0.0)
+      .transition()
+      .duration(3000)
+      .attr('x',closest_text_x)
+      .attr('y',closest_text_y)
+      .text(closest_text_label)
+      .style("opacity", 1.0)
   }
 
   // function xChange() {
@@ -260,4 +347,31 @@ var y_type = ''
   //     .delay(function (d,i) { return i*100})
   //       .attr('cx',function (d) { return xScale(d['x_minutes']) })
   // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 })
